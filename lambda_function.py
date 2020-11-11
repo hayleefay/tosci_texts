@@ -1,18 +1,11 @@
 from twilio.rest import Client
 import requests
 from bs4 import BeautifulSoup as bs
-from dotenv import load_dotenv
-load_dotenv()
 import os
-TOKEN = os.getenv('TOKEN')
-SID = os.getenv('SID')
-TWILIO_NUMBER = os.getenv('TWILIO_NUMBER')
+TOKEN = os.environ['TOKEN']
+SID = os.environ['SID']
+TWILIO_NUMBER = os.environ['TWILIO_NUMBER']
 from people_data import people
-
-# prep the Twilio text
-account_sid = SID 
-auth_token = TOKEN 
-client = Client(account_sid, auth_token) 
 
 
 def get_flavors():
@@ -36,7 +29,7 @@ def get_flavors():
         return None
 
 
-def spread_the_cheer(person, your_flavors):
+def spread_the_cheer(person, your_flavors, client):
     if len(your_flavors) == 2:
         flavors_str = "{} and {}".format(", ".join(flavors[:-1]),  flavors[-1])
         text_body = f'🍦 {flavors_str} are at Tosci\'s today!'
@@ -53,7 +46,7 @@ def spread_the_cheer(person, your_flavors):
             )
 
 
-def match_and_text(flavors):
+def match_and_text(flavors, client):
     for person in people:
         your_flavors = []
         for flavor in flavors:
@@ -62,10 +55,22 @@ def match_and_text(flavors):
         
         if len(your_flavors) > 0:
             print(person, your_flavors)
-            spread_the_cheer(person, your_flavors)
+            spread_the_cheer(person, your_flavors, client)
 
 
-if __name__ == "__main__":
+def lambda_handler(event, context):
+    print("CALLED")
+    
+    # prep the Twilio text
+    account_sid = SID 
+    auth_token = TOKEN 
+    client = Client(account_sid, auth_token)
+    
+    # get flavors
     flavors = get_flavors()
     if flavors is not None:
-        match_and_text(flavors)
+        match_and_text(flavors, client)
+    
+    return {
+        'status_code': 200,
+    }

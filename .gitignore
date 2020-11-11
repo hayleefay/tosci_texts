@@ -1,3 +1,4 @@
+aws-lambda-layer/
 __pycache__/
 people_data.py
 .env
