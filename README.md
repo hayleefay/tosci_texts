@@ -11,3 +11,9 @@ people = {
 
 This is now running on AWS Lambda. In order to make this run there, you need to make a layer with the dependencies in `requirements.txt` and `people_data.py` included. This is how you should make your layer for AWS: `https://dev.to/razcodes/how-to-create-a-lambda-layer-in-aws-106m`.
 
+To update the `people_data.py`:
+1. Update `people_data.py` at `tosci_texts/aws-lambda-layer/lambda-layer/python/lib/python3.8/site-packages/people_data.py` with the new people.
+2. Add to existing zip: `zip -g aws-lambda-layer/lambda-layer/lambda-layer.zip tosci_texts/aws-lambda-layer/lambda-layer/python/lib/python3.8/site-packages/people_data.py`
+3. Upload zip to AWS Lambda Layer by creating a new version of your existing layer.
+4. Update layer in the Lambda function to new version.
+
