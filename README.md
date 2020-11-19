@@ -13,7 +13,7 @@ This is now running on AWS Lambda. In order to make this run there, you need to 
 
 To update the `people_data.py`:
 1. Update `people_data.py` at `tosci_texts/aws-lambda-layer/lambda-layer/python/lib/python3.8/site-packages/people_data.py` with the new people.
-2. Add to existing zip: `zip -g aws-lambda-layer/lambda-layer/lambda-layer.zip tosci_texts/aws-lambda-layer/lambda-layer/python/lib/python3.8/site-packages/people_data.py`
+2. Rezip folder: `zip aws-lambda-layer/lambda-layer.zip aws-lambda-layer/lambda-layer -r`
 3. Upload zip to AWS Lambda Layer by creating a new version of your existing layer.
 4. Update layer in the Lambda function to new version.
 
